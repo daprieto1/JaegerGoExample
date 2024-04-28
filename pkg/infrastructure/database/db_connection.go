@@ -111,7 +111,9 @@ func bootDatabase(config databaseconfig) (*gorm.DB, error) {
 		return nil, fmt.Errorf("database ping: %v", err)
 	}
 
-	err = db.AutoMigrate()
+	err = db.AutoMigrate(
+		Product{},
+	)
 	if err != nil {
 		return nil, err
 	}

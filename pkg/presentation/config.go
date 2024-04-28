@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/Salaton/tracing/pkg/infrastructure/database"
+	"github.com/Salaton/tracing/pkg/presentation/handlers"
 	"github.com/Salaton/tracing/pkg/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -32,5 +33,11 @@ func SetupRoutes(r *gin.Engine) {
 	}
 
 	store := database.NewPostgresDataStore(db.DB)
-	_ = usecase.NewUseCaseImplementation(store)
+	productUseCase := usecase.NewUseCaseImplementation(store)
+	handler := handlers.NewHandlersImplementation(*productUseCase)
+
+	v1 := r.Group("/api/v1")
+	{
+		v1.POST("/product", handler.CreateProduct)
+	}
 }
