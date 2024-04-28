@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/Salaton/tracing/pkg/infrastructure/database"
+	"github.com/Salaton/tracing/pkg/usecase"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,5 +31,6 @@ func SetupRoutes(r *gin.Engine) {
 		log.Fatalf("an error occured connecting to the database: %v", err)
 	}
 
-	_ = database.NewPostgresDataStore(db.DB)
+	store := database.NewPostgresDataStore(db.DB)
+	_ = usecase.NewUseCaseImplementation(store)
 }
