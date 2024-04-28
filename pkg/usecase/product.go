@@ -1,6 +1,12 @@
 package usecase
 
-import "context"
+import (
+	"context"
+
+	"go.opentelemetry.io/otel"
+)
+
+var tracer = otel.Tracer("github.com/Salaton/tracing/pkg/usecases/product")
 
 type Storer interface {
 	CreateProduct(ctx context.Context, product Product) (Product, error)
@@ -17,5 +23,8 @@ func NewUseCaseImplementation(storer Storer) *UseCaseImplementation {
 }
 
 func (u UseCaseImplementation) CreateProduct(ctx context.Context, product Product) (Product, error) {
+	ctx, span := tracer.Start(ctx, "CreateProduct")
+	defer span.End()
+
 	return u.store.CreateProduct(ctx, product)
 }
