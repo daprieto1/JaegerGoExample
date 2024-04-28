@@ -5,8 +5,11 @@ import (
 
 	"github.com/Salaton/tracing/pkg/usecase"
 	"github.com/mitchellh/mapstructure"
+	"go.opentelemetry.io/otel"
 	"gorm.io/gorm"
 )
+
+var tracer = otel.Tracer("github.com/Salaton/tracing/pkg/infrastructure/database/postgres")
 
 type PostgresStore struct {
 	db *gorm.DB
@@ -19,6 +22,9 @@ func NewPostgresDataStore(DB *gorm.DB) *PostgresStore {
 }
 
 func (p PostgresStore) CreateProduct(ctx context.Context, product usecase.Product) (usecase.Product, error) {
+	_, span := tracer.Start(ctx, "CreateProduct")
+	defer span.End()
+
 	prod := Product{}
 	err := mapstructure.Decode(product, &prod)
 	if err != nil {
