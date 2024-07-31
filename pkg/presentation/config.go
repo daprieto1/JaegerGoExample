@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Salaton/tracing/pkg/infrastructure/database"
-	"github.com/Salaton/tracing/pkg/presentation/handlers"
-	"github.com/Salaton/tracing/pkg/usecase"
+	"github.com/daprieto1/tracing/pkg/infrastructure/database"
+	"github.com/daprieto1/tracing/pkg/presentation/handlers"
+	"github.com/daprieto1/tracing/pkg/usecase"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,4 +1,4 @@
-module github.com/Salaton/tracing
+module github.com/daprieto1/tracing
 
 go 1.21.3
 
@@ -33,6 +33,7 @@ require (
 	github.com/jackc/pgx/v5 v5.4.3 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/joho/godotenv v1.5.1
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/Salaton/tracing/pkg/usecase"
+	"github.com/daprieto1/tracing/pkg/usecase"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,6 +26,8 @@ func jsonErrorResponse(c *gin.Context, statusCode int, err error) {
 
 func (h HandlersImplementation) CreateProduct(c *gin.Context) {
 	ctx := c.Request.Context()
+	ctx, span := tracer.Start(ctx, "CreateProduct Service")
+	defer span.End()
 	var input usecase.Product
 
 	if err := c.BindJSON(&input); err != nil {

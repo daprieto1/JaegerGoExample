@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Salaton/tracing/pkg/presentation"
+	"github.com/daprieto1/tracing/pkg/presentation"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"

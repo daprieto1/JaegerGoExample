@@ -2,12 +2,15 @@ package database
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
+
+	"github.com/joho/godotenv"
 )
 
 const (
@@ -23,6 +26,11 @@ type PGInstance struct {
 }
 
 func NewPGInstance() (*PGInstance, error) {
+
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
 	config, err := getConfigDetails()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get config details: %v", err)

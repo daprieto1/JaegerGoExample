@@ -3,13 +3,13 @@ package database
 import (
 	"context"
 
-	"github.com/Salaton/tracing/pkg/usecase"
+	"github.com/daprieto1/tracing/pkg/usecase"
 	"github.com/mitchellh/mapstructure"
 	"go.opentelemetry.io/otel"
 	"gorm.io/gorm"
 )
 
-var tracer = otel.Tracer("github.com/Salaton/tracing/pkg/infrastructure/database/postgres")
+var tracer = otel.Tracer("github.com/daprieto1/tracing/pkg/infrastructure/database/postgres")
 
 type PostgresStore struct {
 	db *gorm.DB
@@ -22,7 +22,7 @@ func NewPostgresDataStore(DB *gorm.DB) *PostgresStore {
 }
 
 func (p PostgresStore) CreateProduct(ctx context.Context, product usecase.Product) (usecase.Product, error) {
-	_, span := tracer.Start(ctx, "CreateProduct")
+	_, span := tracer.Start(ctx, "CreateProduct Database")
 	defer span.End()
 
 	prod := Product{}
