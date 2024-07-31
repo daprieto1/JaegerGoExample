@@ -39,5 +39,7 @@ func SetupRoutes(r *gin.Engine) {
 	v1 := r.Group("/api/v1")
 	{
 		v1.POST("/product", handler.CreateProduct)
+		v1.GET("/product-by-name", handler.GetProductByName)
+		v1.GET("/product-by-description", handler.GetProductByDescription)
 	}
 }

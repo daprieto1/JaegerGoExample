@@ -6,7 +6,10 @@ import (
 
 	"github.com/daprieto1/tracing/pkg/usecase"
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/otel"
 )
+
+var tracer = otel.Tracer("github.com/daprieto1/tracing/pkg/presentation/handlers/handlers")
 
 type HandlersImplementation struct {
 	usecase usecase.UseCaseImplementation
@@ -26,8 +29,9 @@ func jsonErrorResponse(c *gin.Context, statusCode int, err error) {
 
 func (h HandlersImplementation) CreateProduct(c *gin.Context) {
 	ctx := c.Request.Context()
-	ctx, span := tracer.Start(ctx, "CreateProduct Service")
+	ctx, span := tracer.Start(ctx, "CreateProduct Handler")
 	defer span.End()
+
 	var input usecase.Product
 
 	if err := c.BindJSON(&input); err != nil {
@@ -46,6 +50,36 @@ func (h HandlersImplementation) CreateProduct(c *gin.Context) {
 	}
 
 	response, err := h.usecase.CreateProduct(ctx, input)
+	if err != nil {
+		jsonErrorResponse(c, http.StatusBadRequest, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h HandlersImplementation) GetProductByName(c *gin.Context) {
+	ctx := c.Request.Context()
+	ctx, span := tracer.Start(ctx, "GetProductByName Handler")
+	defer span.End()
+
+	name := c.Query("name")
+	response, err := h.usecase.GetProductByName(ctx, name)
+	if err != nil {
+		jsonErrorResponse(c, http.StatusBadRequest, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h HandlersImplementation) GetProductByDescription(c *gin.Context) {
+	ctx := c.Request.Context()
+	ctx, span := tracer.Start(ctx, "GetProductByDescription Handler")
+	defer span.End()
+
+	description := c.Query("description")
+	response, err := h.usecase.GetProductByDescription(ctx, description)
 	if err != nil {
 		jsonErrorResponse(c, http.StatusBadRequest, err)
 		return

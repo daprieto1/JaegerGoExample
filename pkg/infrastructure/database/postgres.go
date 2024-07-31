@@ -42,3 +42,42 @@ func (p PostgresStore) CreateProduct(ctx context.Context, product usecase.Produc
 		Price:       prod.Price,
 	}, nil
 }
+
+func (p PostgresStore) GetProductByName(ctx context.Context, name string) (usecase.Product, error) {
+	_, span := tracer.Start(ctx, "GetProductByName Database")
+	defer span.End()
+
+	prod := Product{}
+	result := p.db.Where("name = ?", name).First(&prod)
+	if result.Error != nil {
+		return usecase.Product{}, result.Error
+	}
+
+	return usecase.Product{
+		Name:        prod.Name,
+		Description: prod.Description,
+		Price:       prod.Price,
+	}, nil
+}
+
+func (p PostgresStore) GetProductByDescription(ctx context.Context, description string) ([]usecase.Product, error) {
+	_, span := tracer.Start(ctx, "GetProductByDescription Database")
+	defer span.End()
+
+	var prods []Product
+	result := p.db.Where("description LIKE ?", "%"+description+"%").Order("name ASC").Find(&prods)
+	if result.Error != nil {
+		return []usecase.Product{}, result.Error
+	}
+
+	results := []usecase.Product{}
+	for _, prod := range prods {
+		results = append(results, usecase.Product{
+			Name:        prod.Name,
+			Description: prod.Description,
+			Price:       prod.Price,
+		})
+	}
+	return results, nil
+
+}

@@ -20,7 +20,7 @@ import (
 )
 
 func startTracing() (*trace.TracerProvider, error) {
-	serviceName := "product-app"
+	serviceName := "meli-product-app"
 	headers := map[string]string{
 		"content-type": "application/json",
 	}
